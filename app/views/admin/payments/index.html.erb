@@ -1,0 +1,82 @@
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <!-- Barra lateral esquerda -->
+    <div class="col-md-2 bg-light d-flex flex-column justify-content-between py-3">
+      <!-- Administrador no topo -->
+      <div class="text-center">
+        <% if admin_signed_in? %>
+          <span class="text-muted">Bem-vindo,</span><br>
+          <strong><%= current_admin.email %></strong>
+        <% end %>
+      </div>
+
+      <!-- Formulário de consulta -->
+      <div class="mt-5">
+        <div class="text-center">
+          <h5>Consulta de Pagamentos</h5>
+          <%= form_with url: admin_payments_path, method: :get, local: true, class: "mt-3" do |f| %>
+            <div class="mb-3">
+              <%= f.label :query, "Nome ou Email", class: "form-label" %>
+              <%= f.text_field :query, class: "form-control", placeholder: "Digite o nome ou email" %>
+            </div>
+            <%= f.submit "Buscar", class: "btn btn-outline-primary btn-sm w-100" %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Botão de logout no rodapé -->
+      <div class="text-center mt-auto">
+        <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-outline-secondary btn-sm w-100' %>
+      </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="col-md-10">
+      <div class="container mt-4">
+        <div class="row">
+          <div class="col">
+            <h1 class="text-center text-primary mb-4">Pagamentos Realizados</h1>
+
+            <% if @payments.empty? %>
+              <div class="alert alert-info text-center">
+                Nenhum pagamento encontrado.
+              </div>
+            <% else %>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                  <thead class="table-dark text-center">
+                    <tr>
+                      <th scope="col">Nome</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Valor</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Transaction ID</th>
+                      <th scope="col">Data de Criação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @payments.each do |payment| %>
+                      <tr>
+                        <td><%= payment.name %></td>
+                        <td><%= payment.email %></td>
+                        <td><%= number_to_currency(payment.amount) %></td>
+                        <td><%= payment.status %></td>
+                        <td><%= payment.transaction_id %></td>
+                        <td><%= payment.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Paginação -->
+              <div class="d-flex justify-content-center mt-4">
+                <%= will_paginate @payments, class: "pagination justify-content-center" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

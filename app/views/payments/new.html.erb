@@ -1,0 +1,133 @@
+<div class="container-fluid vh-100">
+  <div class="row h-100">
+    <!-- Barra lateral esquerda -->
+    <div class="col-md-2 bg-light d-flex flex-column justify-content-between py-3">
+      <!-- Usuário no topo -->
+      <div class="text-center">
+        <% if user_signed_in? %>
+          <span class="text-muted">Bem-vindo,</span><br>
+          <strong><%= current_user.email %></strong>
+        <% end %>
+      </div>
+
+     <!-- Dados do cartão para teste -->
+      <div class="mt-5">
+        <h5 class="text-center">Cartão de Teste</h5>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Número:</strong> 5031433215406351</li>
+          <li class="list-group-item"><strong>CVV:</strong> 123</li>
+          <li class="list-group-item"><strong>Mês de Expiração:</strong> 11</li>
+          <li class="list-group-item"><strong>Ano de Expiração:</strong> 2025</li>
+          <li class="list-group-item"><strong>Código de Segurança:</strong> 123</li>
+          <li class="list-group-item"><strong>Nome:</strong> APRO</li>
+        </ul>
+      </div>
+
+
+      <!-- Botão de logout no rodapé -->
+     <div class="text-center mt-auto">
+        <%= button_to 'Sair', destroy_user_session_path, method: :delete, class: 'btn btn-outline-secondary btn-sm w-100' %>
+     </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="col-md-10 d-flex justify-content-center align-items-center">
+      <div class="col-md-6">
+        <div class="card shadow">
+          <div class="card-header text-center bg-primary text-white">
+            <h1 class="h1 m-0">Realizar Pagamento</h1>
+          </div>
+          <div class="card-body">
+            <%= form_with model: @payment, url: payments_path, html: { class: "needs-validation" } do |f| %>
+              <!-- Nome Completo -->
+              <div class="mb-3">
+                <%= f.label :name, "Nome Completo", class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-person"></i></span>
+                  <%= f.text_field :name, required: true, class: "form-control", placeholder: "Digite seu nome completo" %>
+                </div>
+              </div>
+
+              <!-- E-mail -->
+              <div class="mb-3">
+                <%= f.label :email, "E-mail", class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <%= f.email_field :email, required: true, class: "form-control", placeholder: "Digite seu e-mail" %>
+                </div>
+              </div>
+
+              <!-- Valor a Pagar -->
+              <div class="mb-3">
+                <%= f.label :amount, "Valor a Pagar", class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                  <%= f.number_field :amount, step: 0.01, required: true, class: "form-control", placeholder: "Digite o valor a pagar" %>
+                </div>
+              </div>
+
+              <!-- Método de Pagamento -->
+              <div class="mb-3">
+                <%= f.label :payment_method, "Método de Pagamento", class: "form-label" %>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                  <%= f.select :payment_method, options_for_select([['PIX', 'pix'], ['Boleto', 'bolbradesco'], ['Cartão de Crédito', 'credit_card']]), prompt: 'Selecione o método de pagamento', required: true, id: 'payment-method', class: "form-select" %>
+                </div>
+              </div>
+
+              <!-- Campos do Cartão de Crédito -->
+              <div id="card-fields" class="mt-4">
+                <div class="mb-3">
+                  <%= f.label :card_number, "Número do Cartão", class: "form-label" %>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                    <%= f.text_field :card_number, class: "form-control", placeholder: "Digite o número do cartão" %>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <%= f.label :card_expiration_month, "Mês de Expiração (MM)", class: "form-label" %>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                      <%= f.text_field :card_expiration_month, placeholder: "MM", class: "form-control" %>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <%= f.label :card_expiration_year, "Ano de Expiração (YYYY)", class: "form-label" %>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                      <%= f.text_field :card_expiration_year, placeholder: "YYYY", class: "form-control" %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :security_code, "Código de Segurança (CVV)", class: "form-label" %>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                    <%= f.text_field :security_code, class: "form-control", placeholder: "Digite o CVV" %>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :card_holder_name, "Nome no Cartão", class: "form-label" %>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                    <%= f.text_field :card_holder_name, class: "form-control", placeholder: "Digite o nome como aparece no cartão" %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botão de Submissão -->
+              <div class="text-center mt-4">
+                <%= f.submit "Pagar", class: 'btn btn-primary btn-lg' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
