@@ -36,7 +36,7 @@ gem "bootsnap", require: false
 
 gem 'devise'
 gem 'httparty'
-gem 'mercadopago', '~> 2.2.1'
+gem 'mercadopago', '~> 2.3.0'
 gem 'rest-client'
 gem 'will_paginate', '~> 3.3'
 gem 'bootstrap-will_paginate', '~> 1.0'

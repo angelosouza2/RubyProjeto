@@ -158,7 +158,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mercadopago (2.2.1)
+    mercadopago (2.3.0)
       faraday (>= 0.9.0)
       json (>= 1.4.6)
     mime-types (3.6.0)
@@ -371,7 +371,7 @@ DEPENDENCIES
   httparty
   importmap-rails
   jbuilder
-  mercadopago (~> 2.2.1)
+  mercadopago (~> 2.3.0)
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
   rest-client
